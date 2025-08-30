@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Oshakati Premier Electric</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <!-- External CSS file -->
+  <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="form-header">
+            <div class="logo-container">
+                <h1>Oshakati Premier Electric</h1>
+                <p class="tagline">Reliable Power, Bright Future</p>
+            </div>
+        </header>
+
+        <div class="form-container">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Basic Account</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Identity & Service</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Complete</div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="registrationForm" class="registration-form">
+                <!-- Step 1: Basic Account Setup -->
+                <div class="form-step active" id="step1">
+                    <div class="step-header">
+                        <h2>Create Your Account</h2>
+                        <p>Let's start with your basic information</p>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="validation-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="validation-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number <span class="required">*</span></label>
+                        <input type="tel" id="mobile" name="mobile" placeholder="+264 XX XXX XXXX" required>
+                        <div class="field-hint">Enter your Namibian mobile number</div>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="field-hint">We'll send account updates to this email</div>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-bar"></div>
+                            </div>
+                            <div class="strength-text">Password strength: <span>Weak</span></div>
+                        </div>
+                        <div class="password-requirements">
+                            <div class="requirement" data-requirement="length">
+                                <i class="fas fa-times"></i> At least 8 characters
+                            </div>
+                            <div class="requirement" data-requirement="uppercase">
+                                <i class="fas fa-times"></i> One uppercase letter
+                            </div>
+                            <div class="requirement" data-requirement="lowercase">
+                                <i class="fas fa-times"></i> One lowercase letter
+                            </div>
+                            <div class="requirement" data-requirement="number">
+                                <i class="fas fa-times"></i> One number
+                            </div>
+                        </div>
+                        <button type="button" class="suggest-password" onclick="generateSecurePassword()">
+                            <i class="fas fa-key"></i> Generate Secure Password
+                        </button>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                        <div class="password-container">
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Identity Details & Service Information -->
+                <div class="form-step" id="step2">
+                    <div class="step-header">
+                        <h2>Identity & Service Details</h2>
+                        <p>Help us verify your identity and set up your service</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nationalId">National ID Number <span class="required">*</span></label>
+                        <input type="text" id="nationalId" name="nationalId" placeholder="12345678901234" required>
+                        <div class="field-hint">14-digit Namibian ID number (e.g., 12345678901234)</div>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="address-section">
+                        <h3>Physical Address</h3>
+                        <div class="form-group">
+                            <label for="street">Street Address <span class="required">*</span></label>
+                            <input type="text" id="street" name="street" placeholder="123 Main Street" required>
+                            <div class="validation-message"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="town">Town/City <span class="required">*</span></label>
+                                <input type="text" id="town" name="town" required>
+                                <div class="validation-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Region <span class="required">*</span></label>
+                                <select id="region" name="region" required>
+                                    <option value="">Select Region</option>
+                                    <option value="erongo">Erongo</option>
+                                    <option value="hardap">Hardap</option>
+                                    <option value="karas">Karas</option>
+                                    <option value="kavango-east">Kavango East</option>
+                                    <option value="kavango-west">Kavango West</option>
+                                    <option value="khomas">Khomas</option>
+                                    <option value="kunene">Kunene</option>
+                                    <option value="ohangwena">Ohangwena</option>
+                                    <option value="omaheke">Omaheke</option>
+                                    <option value="omusati">Omusati</option>
+                                    <option value="oshana">Oshana</option>
+                                    <option value="oshikoto">Oshikoto</option>
+                                    <option value="otjozondjupa">Otjozondjupa</option>
+                                    <option value="zambezi">Zambezi</option>
+                                </select>
+                                <div class="validation-message"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="address-section">
+                        <h3>Postal Address</h3>
+                        <div class="form-group">
+                            <label for="postalAddress">Postal Address</label>
+                            <textarea id="postalAddress" name="postalAddress" rows="3" placeholder="P.O. Box 123, Windhoek, Namibia"></textarea>
+                            <div class="field-hint">Leave blank if same as physical address</div>
+                            <div class="validation-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Review & Submit -->
+                <div class="form-step" id="step3">
+                    <div class="step-header">
+                        <h2>Review Your Information</h2>
+                        <p>Please review your details before submitting</p>
+                    </div>
+
+                    <div class="review-section">
+                        <h3>Account Information</h3>
+                        <div class="review-item">
+                            <span class="review-label">Name:</span>
+                            <span class="review-value" id="reviewName"></span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Mobile:</span>
+                            <span class="review-value" id="reviewMobile"></span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Email:</span>
+                            <span class="review-value" id="reviewEmail"></span>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <h3>Identity & Address</h3>
+                        <div class="review-item">
+                            <span class="review-label">National ID:</span>
+                            <span class="review-value" id="reviewNationalId"></span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Physical Address:</span>
+                            <span class="review-value" id="reviewPhysicalAddress"></span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Postal Address:</span>
+                            <span class="review-value" id="reviewPostalAddress"></span>
+                        </div>
+                    </div>
+
+                    <div class="terms-section">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
+                        </label>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span class="btn-text">Complete Registration</span>
+                            <span class="btn-spinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Processing...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-container" id="successMessage" style="display: none;">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Welcome to OPE!</h2>
+                <p>You're now registered with Oshakati Premier Electric. We've sent a confirmation email to your registered address.</p>
+                <div class="next-steps">
+                    <h3>What's Next?</h3>
+                    <ul>
+                        <li>Check your email for account verification</li>
+                        <li>Log in to access online services</li>
+                        <li>Apply for electricity connections</li>
+                        <li>Set up prepaid electricity payments</li>
+                    </ul>
+                </div>
+                <button class="btn btn-primary" onclick="window.location.href='/'">
+                    <i class="fas fa-home"></i> Go to Dashboard
+                </button>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-container" id="errorMessage" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Registration Failed</h3>
+                <p id="errorText">Something went wrong. Please try again.</p>
+                <button class="btn btn-secondary" onclick="hideError()">
+                    <i class="fas fa-arrow-left"></i> Try Again
+                </button>
+            </div>
+        </div>
+
+        <footer class="form-footer">
+            <p>Already have an account? <a href="/auth/login">Please log in here</a></p>
+            <p class="copyright">&copy; 2025 Oshakati Premier Electric. All rights reserved.</p>
+        </footer>
+    </div>
+  <!-- External JS file -->
+  <script src="./scripts/scripts.js"></script>
+</body>
+</html>
