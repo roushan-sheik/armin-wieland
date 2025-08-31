@@ -156,14 +156,15 @@
                 isValid = false;
             }
             else if (fieldName === 'email' && value) {
-                const emailRegex = /^[0-9]+$/;
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
                     message = 'Please enter a valid email address';
                     isValid = false;
                 }
             }
             else if (fieldName === 'mobile' && value) {
-                const mobileRegex = /^\+264\s?\d{2}\s?\d{3}\s?\d{4}$/;
+                // const mobileRegex = /^\+264\s?\d{2}\s?\d{3}\s?\d{4}$/;
+                const mobileRegex = /^[0-9]+$/;
                 if (!mobileRegex.test(value)) {
                     message = 'Please enter a valid Namibian mobile number';
                     isValid = false;
