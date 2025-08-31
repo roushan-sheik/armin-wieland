@@ -3,12 +3,19 @@
 
 ## 📁 File Structure
 ```
- └─ .
+└─ .
    ├─ index.html
+   ├─ pages
+   │  ├─ changePassword.html
+   │  └─ login.html
    ├─ README.MD
    ├─ scripts
+   │  ├─ changePassword.js
+   │  ├─ login.js
    │  └─ scripts.js
    └─ styles
+      ├─ changePassword.css
+      ├─ login.css
       └─ styles.css
 
 ```
