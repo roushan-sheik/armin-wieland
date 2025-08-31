@@ -156,7 +156,7 @@
                 isValid = false;
             }
             else if (fieldName === 'email' && value) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const emailRegex = /^[0-9]+$/;
                 if (!emailRegex.test(value)) {
                     message = 'Please enter a valid email address';
                     isValid = false;
