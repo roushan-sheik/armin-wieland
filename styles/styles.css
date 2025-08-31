@@ -849,12 +849,17 @@
             border: 2px solid var(--error-color);
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.1));
         }
+        .center{
+            text-align: center;
+        }
 
         .success-icon,
         .error-icon {
             font-size: 4rem;
             margin-bottom: var(--spacing-lg);
             animation: pulse 2s ease-in-out infinite;
+            display: flex ;
+            justify-content: center;
         }
 
         @keyframes pulse {
