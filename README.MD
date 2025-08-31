@@ -1,5 +1,9 @@
 ## OPE Multi-Step Registration Form
  - A modern, responsive registration form for Oshakati Premier Electric (OPE) featuring multi-step navigation, real-time validation, and enhanced user experience.
+ 
+## 🚀 Live Link  
+
+[👉 Click here to view the project](https://roushan-sheik.github.io/armin-wieland/index.html)
 
 ## 📁 File Structure
 ```
