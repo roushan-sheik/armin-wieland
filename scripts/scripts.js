@@ -11,9 +11,29 @@
             number: /\d/
         };
 
+        // Create floating particles
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 6000);
+                }, i * 300);
+            }
+        }
+
         // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
             initializeForm();
+            createParticles();
+            setInterval(createParticles, 6000);
         });
 
         function initializeForm() {
@@ -39,31 +59,42 @@
             document.getElementById('nationalId').addEventListener('input', formatNationalId);
         }
 
-        // Step navigation
+        // Step navigation with animations
         function nextStep() {
             if (validateCurrentStep()) {
                 saveCurrentStepData();
                 if (currentStep < totalSteps) {
-                    currentStep++;
-                    showStep(currentStep);
-                    updateProgressBar();
-                    if (currentStep === 3) {
-                        populateReview();
-                    }
+                    const currentStepElement = document.getElementById(`step${currentStep}`);
+                    currentStepElement.classList.add('sliding-out');
+                    
+                    setTimeout(() => {
+                        currentStepElement.classList.remove('active', 'sliding-out');
+                        currentStep++;
+                        showStep(currentStep);
+                        updateProgressBar();
+                        if (currentStep === 3) {
+                            populateReview();
+                        }
+                    }, 300);
                 }
             }
         }
 
         function prevStep() {
             if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-                updateProgressBar();
+                const currentStepElement = document.getElementById(`step${currentStep}`);
+                currentStepElement.classList.add('sliding-out');
+                
+                setTimeout(() => {
+                    currentStepElement.classList.remove('active', 'sliding-out');
+                    currentStep--;
+                    showStep(currentStep);
+                    updateProgressBar();
+                }, 300);
             }
         }
 
         function showStep(step) {
-            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
             document.getElementById(`step${step}`).classList.add('active');
         }
 
@@ -76,9 +107,25 @@
                     step.classList.remove('active');
                 }
             });
+            
+            // Update progress bar fill
+            const progressFill = document.querySelector('.progress-bar::after') || 
+                                document.createElement('style');
+            const percentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.querySelector('.progress-bar').style.setProperty('--progress', percentage + '%');
+            
+            // Add dynamic progress bar CSS
+            if (!document.querySelector('#progress-style')) {
+                const style = document.createElement('style');
+                style.id = 'progress-style';
+                style.textContent = `.progress-bar::after { width: ${percentage}%; }`;
+                document.head.appendChild(style);
+            } else {
+                document.querySelector('#progress-style').textContent = `.progress-bar::after { width: ${percentage}%; }`;
+            }
         }
 
-        // Validation functions
+        // Enhanced validation with animations
         function validateCurrentStep() {
             const currentStepElement = document.getElementById(`step${currentStep}`);
             const requiredInputs = currentStepElement.querySelectorAll('[required]');
@@ -87,6 +134,9 @@
             requiredInputs.forEach(input => {
                 if (!validateField(input)) {
                     isValid = false;
+                    // Add shake animation to invalid fields
+                    input.classList.add('invalid');
+                    setTimeout(() => input.classList.remove('invalid'), 500);
                 }
             });
 
@@ -99,15 +149,12 @@
             let isValid = true;
             let message = '';
 
-            // Clear previous validation state
             clearValidationMessage(field);
 
-            // Required field validation
             if (field.hasAttribute('required') && !value) {
                 message = `${getFieldLabel(field)} is required`;
                 isValid = false;
             }
-            // Email validation
             else if (fieldName === 'email' && value) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
@@ -115,30 +162,25 @@
                     isValid = false;
                 }
             }
-            // Mobile number validation
             else if (fieldName === 'mobile' && value) {
-                const mobileRegex = /.+/;
-
+                const mobileRegex = /^\+264\s?\d{2}\s?\d{3}\s?\d{4}$/;
                 if (!mobileRegex.test(value)) {
                     message = 'Please enter a valid Namibian mobile number';
                     isValid = false;
                 }
             }
-            // National ID validation
             else if (fieldName === 'nationalId' && value) {
                 if (value.length !== 14 || !/^\d{14}$/.test(value)) {
                     message = 'National ID must be exactly 14 digits';
                     isValid = false;
                 }
             }
-            // Password validation
             else if (fieldName === 'password' && value) {
                 if (!isPasswordStrong(value)) {
                     message = 'Password does not meet requirements';
                     isValid = false;
                 }
             }
-            // Confirm password validation
             else if (fieldName === 'confirmPassword' && value) {
                 const password = document.getElementById('password').value;
                 if (value !== password) {
@@ -149,8 +191,12 @@
 
             if (!isValid) {
                 showValidationMessage(field, message, 'error');
+                field.classList.add('invalid');
+                field.classList.remove('valid');
             } else if (value) {
-                showValidationMessage(field, '✓', 'success');
+                showValidationMessage(field, '✓ Valid', 'success');
+                field.classList.add('valid');
+                field.classList.remove('invalid');
             }
 
             return isValid;
@@ -170,6 +216,7 @@
                 validationElement.textContent = '';
                 validationElement.className = 'validation-message';
             }
+            field.classList.remove('valid', 'invalid');
         }
 
         function getFieldLabel(field) {
@@ -177,7 +224,7 @@
             return label ? label.textContent.replace(' *', '') : field.name;
         }
 
-        // Password strength checker
+        // Enhanced password strength checker
         function checkPasswordStrength(password) {
             const strengthBar = document.querySelector('.strength-bar');
             const strengthText = document.querySelector('.strength-text span');
@@ -186,7 +233,6 @@
             let score = 0;
             let metRequirements = 0;
 
-            // Check each requirement
             Object.keys(passwordRequirements).forEach((req, index) => {
                 const requirement = requirements[index];
                 const icon = requirement.querySelector('i');
@@ -201,10 +247,7 @@
                 }
             });
 
-            // Calculate strength
             score = (metRequirements / Object.keys(passwordRequirements).length) * 100;
-
-            // Update strength meter
             strengthBar.style.width = score + '%';
             
             if (score < 50) {
@@ -230,7 +273,7 @@
             if (confirmPassword && password !== confirmPassword) {
                 showValidationMessage(document.getElementById('confirmPassword'), 'Passwords do not match', 'error');
             } else if (confirmPassword && password === confirmPassword) {
-                showValidationMessage(document.getElementById('confirmPassword'), '✓', 'success');
+                showValidationMessage(document.getElementById('confirmPassword'), '✓ Passwords match', 'success');
             }
         }
 
@@ -276,13 +319,18 @@
             document.getElementById('password').value = password;
             checkPasswordStrength(password);
             
-            // Show password temporarily
-            document.getElementById('password').type = 'text';
-            document.querySelector('#password').parentElement.querySelector('.password-toggle i').className = 'fas fa-eye-slash';
+            // Show password temporarily with animation
+            const passwordField = document.getElementById('password');
+            const toggle = passwordField.parentElement.querySelector('.password-toggle i');
+            
+            passwordField.type = 'text';
+            toggle.className = 'fas fa-eye-slash';
+            passwordField.style.background = 'linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2))';
             
             setTimeout(() => {
-                document.getElementById('password').type = 'password';
-                document.querySelector('#password').parentElement.querySelector('.password-toggle i').className = 'fas fa-eye';
+                passwordField.type = 'password';
+                toggle.className = 'fas fa-eye';
+                passwordField.style.background = '';
             }, 3000);
         }
 
@@ -360,30 +408,47 @@
             
             // Show loading state
             btnText.style.display = 'none';
-            btnSpinner.style.display = 'inline-block';
+            btnSpinner.style.display = 'inline-flex';
             submitBtn.disabled = true;
+            
+            // Collect all form data
+            saveCurrentStepData();
+            formData.password = document.getElementById('password').value;
+            formData.confirmPassword = document.getElementById('confirmPassword').value;
+            formData.terms = document.getElementById('terms').checked;
+            
+            // Log form data to console
+            console.log('Registration Form Data:', {
+                ...formData,
+                password: '[PROTECTED]', // Don't log actual password
+                confirmPassword: '[PROTECTED]',
+                timestamp: new Date().toISOString()
+            });
             
             // Simulate API call
             setTimeout(() => {
-                // Simulate random success/failure for demo
-                const isSuccess = Math.random() > 0.2; // 80% success rate
+                const isSuccess = Math.random() > 0.1; // 90% success rate
+                
+                btnText.style.display = 'inline-block';
+                btnSpinner.style.display = 'none';
+                submitBtn.disabled = false;
                 
                 if (isSuccess) {
                     showSuccess();
                 } else {
                     showError('This email address is already registered. Please use a different email or log in to your existing account.');
                 }
-                
-                // Reset button state
-                btnText.style.display = 'inline-block';
-                btnSpinner.style.display = 'none';
-                submitBtn.disabled = false;
             }, 2000);
         }
 
         function showSuccess() {
             document.querySelector('.form-container').style.display = 'none';
             document.getElementById('successMessage').style.display = 'block';
+            
+            // Also show modal
+            setTimeout(() => {
+                document.getElementById('successModal').classList.add('show');
+            }, 500);
         }
 
         function showError(message) {
@@ -397,19 +462,12 @@
             document.querySelector('.form-container').style.display = 'block';
         }
 
-        // Utility functions
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('show');
         }
 
-        function validateMobile(mobile) {
-            const re = /^\+264\s?\d{2}\s?\d{3}\s?\d{4}$/;
-            return re.test(mobile);
-        }
-
-        function validateNationalId(id) {
-            return /^\d{14}$/.test(id);
+        function goToLogin() {
+            window.location.href = 'pages/login.html';
         }
 
         // Keyboard navigation
@@ -421,5 +479,9 @@
                 } else {
                     document.getElementById('registrationForm').dispatchEvent(new Event('submit'));
                 }
+            }
+            
+            if (e.key === 'Escape') {
+                closeModal();
             }
         });

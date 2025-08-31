@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Oshakati Premier Electric</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-     <!-- External CSS file -->
+       <!-- External CSS file -->
   <link rel="stylesheet" href="./styles/styles.css">
 </head>
 <body>
@@ -117,6 +116,7 @@
                     </div>
 
                     <div class="form-actions">
+                        <div></div>
                         <button type="button" class="btn btn-primary" onclick="nextStep()">
                             Continue <i class="fas fa-arrow-right"></i>
                         </button>
@@ -133,7 +133,7 @@
                     <div class="form-group">
                         <label for="nationalId">National ID Number <span class="required">*</span></label>
                         <input type="text" id="nationalId" name="nationalId" placeholder="12345678901234" required>
-                        <div class="field-hint">14-digit Namibian ID number (e.g., 12345678901234)</div>
+                        <div class="field-hint">14-digit Namibian ID number</div>
                         <div class="validation-message"></div>
                     </div>
 
@@ -203,7 +203,7 @@
                     </div>
 
                     <div class="review-section">
-                        <h3>Account Information</h3>
+                        <h3><i class="fas fa-user"></i> Account Information</h3>
                         <div class="review-item">
                             <span class="review-label">Name:</span>
                             <span class="review-value" id="reviewName"></span>
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="review-section">
-                        <h3>Identity & Address</h3>
+                        <h3><i class="fas fa-id-card"></i> Identity & Address</h3>
                         <div class="review-item">
                             <span class="review-label">National ID:</span>
                             <span class="review-value" id="reviewNationalId"></span>
@@ -250,7 +250,7 @@
                         <button type="submit" class="btn btn-primary" id="submitBtn">
                             <span class="btn-text">Complete Registration</span>
                             <span class="btn-spinner" style="display: none;">
-                                <i class="fas fa-spinner fa-spin"></i> Processing...
+                                <i class="fas fa-spinner"></i> Processing...
                             </span>
                         </button>
                     </div>
@@ -267,14 +267,14 @@
                 <div class="next-steps">
                     <h3>What's Next?</h3>
                     <ul>
-                        <li>Check your email for account verification</li>
-                        <li>Log in to access online services</li>
-                        <li>Apply for electricity connections</li>
-                        <li>Set up prepaid electricity payments</li>
+                        <li style="--item-index: 0">Check your email for account verification</li>
+                        <li style="--item-index: 1">Log in to access online services</li>
+                        <li style="--item-index: 2">Apply for electricity connections</li>
+                        <li style="--item-index: 3">Set up prepaid electricity payments</li>
                     </ul>
                 </div>
-                <button class="btn btn-primary" onclick="window.location.href='/'">
-                    <i class="fas fa-home"></i> Go to Dashboard
+                <button class="btn btn-primary" onclick="goToLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Go to Login
                 </button>
             </div>
 
@@ -292,11 +292,28 @@
         </div>
 
         <footer class="form-footer">
-            <p>Already have an account? <a href="/auth/login">Please log in here</a></p>
+            <p>Already have an account? <a href="pages/login.html">Please log in here</a></p>
             <p class="copyright">&copy; 2025 Oshakati Premier Electric. All rights reserved.</p>
         </footer>
     </div>
-  <!-- External JS file -->
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Registration Successful!</h2>
+            <p>Your account has been created successfully. You can now log in to access your dashboard.</p>
+            <div class="form-actions" style="margin-top: var(--spacing-xl); border: none; padding: 0;">
+                <button class="btn btn-secondary" onclick="closeModal()">Stay Here</button>
+                <button class="btn btn-primary" onclick="goToLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login Now
+                </button>
+            </div>
+        </div>
+    </div>
+
   <script src="./scripts/scripts.js"></script>
 </body>
 </html>
