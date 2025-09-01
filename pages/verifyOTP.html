@@ -31,6 +31,40 @@
                 font-size: 1.25rem;
             }
         }
+        
+        /* Modal styles */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+        
+        .modal-content {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-icon {
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -90,6 +124,69 @@
             </form>
         </div>
     </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop fixed inset-0"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative z-10">
+                <div class="text-center">
+                    <!-- Success Icon -->
+                    <div class="flex justify-center mb-4">
+                        <div class="success-icon w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">OTP Verified!</h3>
+                    <p class="text-gray-600 mb-6">
+                        Your OTP has been verified successfully. You can now proceed to login with your new password.
+                    </p>
+                    
+                    <!-- Action Button -->
+                     <a href="setPasswordPage.html">
+
+                         <button id="proceedBtn" class="w-full bg-[#1b1e20] text-white py-3 px-4 rounded-[4px] font-medium transition-colors hover:bg-black">
+                             Set New Password
+                            </button>
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Resend Success Modal -->
+    <div id="resendSuccessModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop fixed inset-0"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative z-10">
+                <div class="text-center">
+                    <!-- Success Icon -->
+                    <div class="flex justify-center mb-4">
+                        <div class="success-icon w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">OTP Resent!</h3>
+                    <p class="text-gray-600 mb-6">
+                        A new OTP has been sent to your email address. Please check your inbox and enter the code.
+                    </p>
+                    
+                    <!-- Action Button -->
+                    <button id="closeResendModal" class="w-full bg-blue-500 text-white py-3 px-4 rounded-[4px] font-medium transition-colors hover:bg-blue-600">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
  
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -100,6 +197,10 @@
             const resendBtn = document.getElementById('resendBtn');
             const timerElement = document.getElementById('timer');
             const otpError = document.getElementById('otp-error');
+            const successModal = document.getElementById('successModal');
+            const proceedBtn = document.getElementById('proceedBtn');
+            const resendSuccessModal = document.getElementById('resendSuccessModal');
+            const closeResendModal = document.getElementById('closeResendModal');
             
             let countdown = 60;
             let timerInterval;
@@ -194,6 +295,30 @@
                 return true;
             }
             
+            // Show success modal
+            function showSuccessModal() {
+                successModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            // Hide success modal
+            function hideSuccessModal() {
+                successModal.classList.add('hidden');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+            
+            // Show resend success modal
+            function showResendSuccessModal() {
+                resendSuccessModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            // Hide resend success modal
+            function hideResendSuccessModal() {
+                resendSuccessModal.classList.add('hidden');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+            
             // Form submission
             otpForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -206,13 +331,13 @@
                     verifyBtn.textContent = 'Verifying...';
                     
                     // Simulate API call
+                    showSuccessModal();
                     setTimeout(() => {
                         // For demo purposes, we'll accept any 6-digit code
                         // In a real application, you would verify the OTP with your backend
                         
-                        // Simulate success
-                        alert('OTP verified successfully! Redirecting to reset password page...');
-                        window.location.href = 'login.html';
+                        // Simulate success - show modal instead of alert
+                          window.location.href = 'setPasswordPage.html';
                         
                         // Reset button in case of error
                         verifyBtn.disabled = false;
@@ -229,7 +354,9 @@
                 
                 // Simulate API call
                 setTimeout(() => {
-                    alert('A new OTP has been sent to your email');
+                    // Show resend success modal instead of alert
+                    showResendSuccessModal();
+                    
                     startTimer();
                     resendBtn.textContent = 'Resend OTP';
                     
@@ -237,6 +364,17 @@
                     otpInputs.forEach(input => input.value = '');
                     otpInputs[0].focus();
                 }, 1500);
+            });
+            
+            // Proceed button in success modal
+            proceedBtn.addEventListener('click', function() {
+                hideSuccessModal();
+                window.location.href = 'login.html';
+            });
+            
+            // Close button in resend modal
+            closeResendModal.addEventListener('click', function() {
+                hideResendSuccessModal();
             });
             
             // Initialize
