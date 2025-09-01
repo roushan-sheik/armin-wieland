@@ -1,319 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Oshakati Premier Electric</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link rel="shortcut icon" href="./images/home-fav-icon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
        <!-- External CSS file -->
   <link rel="stylesheet" href="./styles/styles.css">
 </head>
-<body>
-    <div class="container">
-        <header class="form-header">
-            <div class="logo-container">
-                <h1>Oshakati Premier Electric</h1>
-                <p class="tagline">Reliable Power, Bright Future</p>
-            </div>
-        </header>
+<body class="bg-gray-100 ">
+    <div class="mobile-container">
 
-        <div class="form-container">
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-step active" data-step="1">
-                        <div class="step-number">1</div>
-                        <div class="step-label">Basic Account</div>
-                    </div>
-                    <div class="progress-step" data-step="2">
-                        <div class="step-number">2</div>
-                        <div class="step-label">Identity & Service</div>
-                    </div>
-                    <div class="progress-step" data-step="3">
-                        <div class="step-number">3</div>
-                        <div class="step-label">Complete</div>
-                    </div>
+        <!-- Header -->
+        <div class="flex flex-col items-center px-6 pt-8 pb-6">
+            <div class="w-16 flex items-center justify-center">
+          
+            </div>
+            <div class="w-[90px] h[100px] mb-8">
+                <img class="w-full h-full" src="./assets/logo.png" alt="Logo" />
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full ">
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-in-out" style="width: 50%"></div>
                 </div>
+                <h4 class="text-gray-400 text-start mt-2 text-xs mb-6 ">Step <span id="current-step">1</span> of 2</h4>
             </div>
 
-            <form id="registrationForm" class="registration-form">
-                <!-- Step 1: Basic Account Setup -->
-                <div class="form-step active" id="step1">
-                    <div class="step-header">
-                        <h2>Create Your Account</h2>
-                        <p>Let's start with your basic information</p>
+            <h1 class="text-2xl font-semibold text-gray-900">Register</h1>
+        </div>
+
+            
+        <!-- Form Container -->
+        <div class="px-6 pb-8">
+            <form id="registrationForm">
+                <!-- Step 1 -->
+                <div id="step1" class="space-y-2">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input type="text" id="firstName" name="firstName" class="input-field w-full" placeholder="First Name" required>
+                        <span class="text-red-500 text-xs hidden" id="firstName-error">First name is required</span>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name <span class="required">*</span></label>
-                            <input type="text" id="firstName" name="firstName" required>
-                            <div class="validation-message"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name <span class="required">*</span></label>
-                            <input type="text" id="lastName" name="lastName" required>
-                            <div class="validation-message"></div>
-                        </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" class="input-field w-full" placeholder="Last Name" required>
+                        <span class="text-red-500 text-xs hidden" id="lastName-error">Last name is required</span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="mobile">Mobile Number <span class="required">*</span></label>
-                        <input type="tel" id="mobile" name="mobile" placeholder="+264 XX XXX XXXX" required>
-                        <div class="field-hint">Enter your Namibian mobile number</div>
-                        <div class="validation-message"></div>
+                    <div>
+                        <label for="idNumber" class="block text-sm font-medium text-gray-700 mb-2">ID Number <span class="text-gray-400">(Optional)</span></label>
+                        <input type="text" id="idNumber" name="idNumber" class="input-field w-full" placeholder="ID Number">
                     </div>
 
-                    <div class="form-group">
-                        <label for="email">Email Address <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" required>
-                        <div class="field-hint">We'll send account updates to this email</div>
-                        <div class="validation-message"></div>
+                    <div>
+                        <label for="mobile" class="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
+                        <input type="tel" id="mobile" name="mobile" class="input-field w-full" placeholder="Example:08XXXXXXX" required>
+                        <span class="text-red-500 text-xs hidden" id="mobile-error">Valid mobile number is required</span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="password">Password <span class="required">*</span></label>
-                        <div class="password-container">
-                            <input type="password" id="password" name="password" required>
-                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <div class="password-strength">
-                            <div class="strength-meter">
-                                <div class="strength-bar"></div>
-                            </div>
-                            <div class="strength-text">Password strength: <span>Weak</span></div>
-                        </div>
-                        <div class="password-requirements">
-                            <div class="requirement" data-requirement="length">
-                                <i class="fas fa-times"></i> At least 8 characters
-                            </div>
-                            <div class="requirement" data-requirement="uppercase">
-                                <i class="fas fa-times"></i> One uppercase letter
-                            </div>
-                            <div class="requirement" data-requirement="lowercase">
-                                <i class="fas fa-times"></i> One lowercase letter
-                            </div>
-                            <div class="requirement" data-requirement="number">
-                                <i class="fas fa-times"></i> One number
-                            </div>
-                        </div>
-                        <button type="button" class="suggest-password" onclick="generateSecurePassword()">
-                            <i class="fas fa-key"></i> Generate Secure Password
-                        </button>
-                        <div class="validation-message"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
-                        <div class="password-container">
-                            <input type="password" id="confirmPassword" name="confirmPassword" required>
-                            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <div class="validation-message"></div>
-                    </div>
-
-                    <div class="form-actions">
-                        <div></div>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()">
-                            Continue <i class="fas fa-arrow-right"></i>
-                        </button>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" class="input-field w-full" placeholder="your@email.com" required>
+                        <span class="text-red-500 text-xs hidden" id="email-error">Valid email address is required</span>
                     </div>
                 </div>
 
-                <!-- Step 2: Identity Details & Service Information -->
-                <div class="form-step" id="step2">
-                    <div class="step-header">
-                        <h2>Identity & Service Details</h2>
-                        <p>Help us verify your identity and set up your service</p>
+                <!-- Step 2 -->
+                <div id="step2" class="space-y-4 hidden">
+                    <div>
+                        <label for="postalAddress" class="block text-sm font-medium text-gray-700 mb-2">Postal Address <span class="text-gray-400">(Optional)</span></label>
+                        <input id="postalAddress" name="postalAddress" class="input-field w-full  resize-none" placeholder="Postal Address"></input>
                     </div>
 
-                    <div class="form-group">
-                        <label for="nationalId">National ID Number <span class="required">*</span></label>
-                        <input type="text" id="nationalId" name="nationalId" placeholder="12345678901234" required>
-                        <div class="field-hint">14-digit Namibian ID number</div>
-                        <div class="validation-message"></div>
+                    <div>
+                        <label for="physicalAddress" class="block text-sm font-medium text-gray-700 mb-2">Physical Address</label>
+                        <input id="physicalAddress" name="physicalAddress" class="input-field w-full  resize-none" placeholder="Physical Address" required></input>
+                        <span class="text-red-500 text-xs hidden" id="physicalAddress-error">Physical address is required</span>
                     </div>
 
-                    <div class="address-section">
-                        <h3>Physical Address</h3>
-                        <div class="form-group">
-                            <label for="street">Street Address <span class="required">*</span></label>
-                            <input type="text" id="street" name="street" placeholder="123 Main Street" required>
-                            <div class="validation-message"></div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" class="input-field w-full pr-12" placeholder="Your Password" required>
+                            <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </button>
                         </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="town">Town/City <span class="required">*</span></label>
-                                <input type="text" id="town" name="town" required>
-                                <div class="validation-message"></div>
+                        <!-- Password Strength Indicator -->
+                        <div class="mt-2">
+                            <div class="flex space-x-1 mb-2">
+                                <div id="strength-1" class="password-strength-bar flex-1 strength-gray"></div>
+                                <div id="strength-2" class="password-strength-bar flex-1 strength-gray"></div>
+                                <div id="strength-3" class="password-strength-bar flex-1 strength-gray"></div>
+                                <div id="strength-4" class="password-strength-bar flex-1 strength-gray"></div>
                             </div>
-                            <div class="form-group">
-                                <label for="region">Region <span class="required">*</span></label>
-                                <select id="region" name="region" required>
-                                    <option value="">Select Region</option>
-                                    <option value="erongo">Erongo</option>
-                                    <option value="hardap">Hardap</option>
-                                    <option value="karas">Karas</option>
-                                    <option value="kavango-east">Kavango East</option>
-                                    <option value="kavango-west">Kavango West</option>
-                                    <option value="khomas">Khomas</option>
-                                    <option value="kunene">Kunene</option>
-                                    <option value="ohangwena">Ohangwena</option>
-                                    <option value="omaheke">Omaheke</option>
-                                    <option value="omusati">Omusati</option>
-                                    <option value="oshana">Oshana</option>
-                                    <option value="oshikoto">Oshikoto</option>
-                                    <option value="otjozondjupa">Otjozondjupa</option>
-                                    <option value="zambezi">Zambezi</option>
-                                </select>
-                                <div class="validation-message"></div>
-                            </div>
+                            <p class="text-xs text-gray-500">Use 8 or more characters with a mix of letters, numbers & symbols.</p>
                         </div>
+                        <span class="text-red-500 text-xs hidden" id="password-error">Password must be at least 8 characters</span>
                     </div>
 
-                    <div class="address-section">
-                        <h3>Postal Address</h3>
-                        <div class="form-group">
-                            <label for="postalAddress">Postal Address</label>
-                            <textarea id="postalAddress" name="postalAddress" rows="3" placeholder="P.O. Box 123, Windhoek, Namibia"></textarea>
-                            <div class="field-hint">Leave blank if same as physical address</div>
-                            <div class="validation-message"></div>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="input-field w-full pr-12" placeholder="Confirm Password" required>
+                            <button type="button" id="toggleConfirmPassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </button>
                         </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()">
-                            Continue <i class="fas fa-arrow-right"></i>
-                        </button>
+                        <span class="text-red-500 text-xs hidden" id="confirmPassword-error">Passwords do not match</span>
                     </div>
                 </div>
 
-                <!-- Step 3: Review & Submit -->
-                <div class="form-step" id="step3">
-                    <div class="step-header">
-                        <h2>Review Your Information</h2>
-                        <p>Please review your details before submitting</p>
-                    </div>
-
-                    <div class="review-section">
-                        <h3><i class="fas fa-user"></i> Account Information</h3>
-                        <div class="review-item">
-                            <span class="review-label">Name:</span>
-                            <span class="review-value" id="reviewName"></span>
-                        </div>
-                        <div class="review-item">
-                            <span class="review-label">Mobile:</span>
-                            <span class="review-value" id="reviewMobile"></span>
-                        </div>
-                        <div class="review-item">
-                            <span class="review-label">Email:</span>
-                            <span class="review-value" id="reviewEmail"></span>
-                        </div>
-                    </div>
-
-                    <div class="review-section">
-                        <h3><i class="fas fa-id-card"></i> Identity & Address</h3>
-                        <div class="review-item">
-                            <span class="review-label">National ID:</span>
-                            <span class="review-value" id="reviewNationalId"></span>
-                        </div>
-                        <div class="review-item">
-                            <span class="review-label">Physical Address:</span>
-                            <span class="review-value" id="reviewPhysicalAddress"></span>
-                        </div>
-                        <div class="review-item">
-                            <span class="review-label">Postal Address:</span>
-                            <span class="review-value" id="reviewPostalAddress"></span>
-                        </div>
-                    </div>
-
-                    <div class="terms-section">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="terms" name="terms" required>
-                            <span class="checkmark"></span>
-                            I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
-                        </label>
-                        <div class="validation-message"></div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <span class="btn-text">Complete Registration</span>
-                            <span class="btn-spinner" style="display: none;">
-                                <i class="fas fa-spinner"></i> Processing...
-                            </span>
-                        </button>
-                    </div>
+                <!-- Navigation Buttons -->
+                <div class="mt-8 space-y-3">
+                    <button type="button" id="nextBtn" class="w-full bg-blue-500 text-white py-2 px-4 rounded-[4px] font-medium hover:bg-blue-600 transition-colors">
+                        Next
+                    </button>
+                    <button type="button" id="backBtn" class="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-[4px] font-medium hover:bg-gray-300 transition-colors hidden">
+                        Back
+                    </button>
+                    <button type="submit" id="submitBtn" class="w-full bg-[#1b1e20] text-white py-2 px-4 rounded-[4px] font-medium hover:bg-blue-600 transition-colors hidden">
+                 <i class="fa-solid fa-pen-to-square"></i>       Register
+                    </button>
+                        
                 </div>
             </form>
-
-            <!-- Success Message -->
-            <div class="success-container" id="successMessage" style="display: none;">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2>Welcome to OPE!</h2>
-                <p>You're now registered with Oshakati Premier Electric. We've sent a confirmation email to your registered address.</p>
-                <div class="next-steps">
-                    <h3>What's Next?</h3>
-                    <ul>
-                        <li style="--item-index: 0">Check your email for account verification</li>
-                        <li style="--item-index: 1">Log in to access online services</li>
-                        <li style="--item-index: 2">Apply for electricity connections</li>
-                        <li style="--item-index: 3">Set up prepaid electricity payments</li>
-                    </ul>
-                </div>
-                <button class="btn btn-primary" onclick="goToLogin()">
-                    <i class="fas fa-sign-in-alt"></i> Go to Login
-                </button>
-            </div>
-
-            <!-- Error Message -->
-            <div class="error-container" id="errorMessage" style="display: none;">
-                <div class="error-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <h3>Registration Failed</h3>
-                <p id="errorText">Something went wrong. Please try again.</p>
-                <button class="btn btn-secondary" onclick="hideError()">
-                    <i class="fas fa-arrow-left"></i> Try Again
-                </button>
-            </div>
-        </div>
-
-        <footer class="form-footer">
-            <p>Already have an account? <a href="pages/login.html">Please log in here</a></p>
-            <p class="copyright">&copy; 2025 Oshakati Premier Electric. All rights reserved.</p>
-        </footer>
+        
+<!-- Already have an account button -->
+<div class="text-center mt-6">
+    <div class="inline-flex items-center text-sm text-gray-600">
+        <span>Already have an account?</span>
+        <button id="alreadyHaveAccountBtn" class="ml-1 font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md px-2 py-1 transition-colors duration-200">
+            Login now
+        </button>
     </div>
+</div>
+           
+        </div>
+        <!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md mx-4">
+        <!-- Green Top Section -->
+        <div class="bg-green-500 py-6 px-4 text-center">
+            <div class="flex justify-center mb-2">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">SUCCESS</h3>
+        </div>
+        
+        <!-- White Middle Section -->
+        <div class="bg-white py-8 px-6 text-center">
+            <p class="text-gray-700">Congratulations, your account has been successfully created.</p>
+        </div>
+        
+        <!-- Green Continue Button -->
+        <div class="bg-white py-4 px-6">
+            <a href="./pages/login.html">
+            <button id="continueBtn" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-md transition-colors">
 
-    <!-- Success Modal -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal">
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2>Registration Successful!</h2>
-            <p>Your account has been created successfully. You can now log in to access your dashboard.</p>
-            <div class="form-actions" style="margin-top: var(--spacing-xl); border: none; padding: 0;">
-                <button class="btn btn-secondary" onclick="closeModal()">Stay Here</button>
-                <button class="btn btn-primary" onclick="goToLogin()">
-                    <i class="fas fa-sign-in-alt"></i> Login Now
+                    Continue to Login
                 </button>
-            </div>
+            </a>
         </div>
     </div>
+</div>
+    </div>
 
-  <script src="./scripts/scripts.js"></script>
+<script src="./scripts/scripts.js" />
 </body>
 </html>
