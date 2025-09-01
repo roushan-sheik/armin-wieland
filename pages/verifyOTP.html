@@ -143,9 +143,13 @@
                     <!-- Success Message -->
                     <h3 class="text-xl font-bold text-gray-900 mb-2">OTP Verified!</h3>
                     <p class="text-gray-600 mb-6">
-                        Your OTP has been verified successfully. You can now proceed to login with your new password.
+                        Your OTP has been verified successfully. You can now proceed to set a new password.
                     </p>
-                
+                    
+                    <!-- Action Button -->
+                    <button id="proceedBtn" class="w-full bg-[#1b1e20] text-white py-3 px-4 rounded-[4px] font-medium transition-colors hover:bg-black">
+                        Set New Password
+                    </button>
                 </div>
             </div>
         </div>
@@ -201,11 +205,12 @@
             // Initialize OTP inputs
             function initializeOtpInputs() {
                 otpInputs.forEach((input, index) => {
-                    input.addEventListener('input', (e) => {
+                    // Handle input event - only allow single digit
+                    input.addEventListener('input', function(e) {
                         const value = e.target.value;
                         
                         // Only allow numbers
-                        if (!/^\d*$/.test(value)) {
+                        if (!/^\d$/.test(value)) {
                             e.target.value = '';
                             return;
                         }
@@ -221,28 +226,39 @@
                         }
                     });
                     
-                    input.addEventListener('keydown', (e) => {
+                    // Handle keydown events for special keys
+                    input.addEventListener('keydown', function(e) {
                         // Move to previous input on backspace if current is empty
                         if (e.key === 'Backspace' && !e.target.value && index > 0) {
                             otpInputs[index - 1].focus();
                         }
+                        
+                        // Prevent non-numeric keys (except backspace, tab, arrow keys)
+                        if (!/^\d$/.test(e.key) && 
+                            !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes(e.key)) {
+                            e.preventDefault();
+                        }
                     });
                     
                     // Handle paste event
-                    input.addEventListener('paste', (e) => {
+                    input.addEventListener('paste', function(e) {
                         e.preventDefault();
-                        const pastedData = e.clipboardData.getData('text').slice(0, 6);
-                        const digits = pastedData.split('');
+                        const pastedData = e.clipboardData.getData('text');
+                        const digits = pastedData.replace(/\D/g, '').slice(0, 6).split('');
                         
+                        // Clear all inputs first
+                        otpInputs.forEach(inp => inp.value = '');
+                        
+                        // Fill the inputs with pasted digits
                         digits.forEach((digit, i) => {
-                            if (i < otpInputs.length && /^\d$/.test(digit)) {
+                            if (i < otpInputs.length) {
                                 otpInputs[i].value = digit;
                             }
                         });
                         
-                        // Focus the last filled input or the next empty one
-                        const lastFilledIndex = Math.min(digits.length - 1, otpInputs.length - 1);
-                        otpInputs[lastFilledIndex].focus();
+                        // Focus the next empty input or the last filled one
+                        const nextIndex = Math.min(digits.length, otpInputs.length - 1);
+                        otpInputs[nextIndex].focus();
                     });
                 });
             }
@@ -324,15 +340,14 @@
                     verifyBtn.textContent = 'Verifying...';
                     
                     // Simulate API call
-                    showSuccessModal();
                     setTimeout(() => {
                         // For demo purposes, we'll accept any 6-digit code
                         // In a real application, you would verify the OTP with your backend
                         
-                        // Simulate success - show modal instead of alert
-                          window.location.href = 'setPasswordPage.html';
+                        // Show success modal
+                        showSuccessModal();
                         
-                        // Reset button in case of error
+                        // Reset button
                         verifyBtn.disabled = false;
                         verifyBtn.textContent = 'Verify OTP';
                     }, 1500);
@@ -347,7 +362,7 @@
                 
                 // Simulate API call
                 setTimeout(() => {
-                    // Show resend success modal instead of alert
+                    // Show resend success modal
                     showResendSuccessModal();
                     
                     startTimer();
@@ -362,7 +377,7 @@
             // Proceed button in success modal
             proceedBtn.addEventListener('click', function() {
                 hideSuccessModal();
-                window.location.href = 'login.html';
+                window.location.href = 'setPasswordPage.html';
             });
             
             // Close button in resend modal
