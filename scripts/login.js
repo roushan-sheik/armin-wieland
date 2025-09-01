@@ -110,16 +110,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Change Password button functionality
-    const changePassBtn = document.getElementById('changePassRoute');
-    
-    if (changePassBtn) {
-        changePassBtn.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent form submission
-            // Redirect to change password page
-            window.location.href = 'changePassword.html';
-        });
-    } else {
-        console.error('Button with ID "changePassRoute" not found');
-    }
+ 
 });
