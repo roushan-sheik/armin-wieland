@@ -91,7 +91,12 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
+        .bg-pri{
+            background:#1b1e20
+        }
+        .text-pri{
+            color:#1b1e20
+        }
           .password-strength-bar {
             height: 4px;
             border-radius: 2px;
