@@ -1,11 +1,18 @@
-## OPE Multi-Step Registration Form
- - A modern, responsive registration form for Oshakati Premier Electric (OPE) featuring multi-step navigation, real-time validation, and enhanced user experience.
+# OPE Multi-Step Registration Form
+
+A modern, responsive registration form for Oshakati Premier Electric (OPE) featuring multi-step navigation, real-time validation, and enhanced user experience.
+
+ 
+## 🌐 Live Link
+[https://roushan-sheik.github.io/armin-wieland/](https://roushan-sheik.github.io/armin-wieland/)
+
 
 ## 📁 File Structure
 ```
 └─ .
    ├─ assets
    │  ├─ favicon.ico
+   │  ├─ favicon.png
    │  └─ logo.png
    ├─ index.html
    ├─ pages
@@ -24,62 +31,42 @@
    │  └─ styles.css
    └─ tailwind.config.js
 
-
 ```
 ## 🚀 Features
 ### Multi-Step Process
 
-- Step 1: Basic Account Setup (Name, Mobile, Email, Password)
-- Step 2: Identity Details & Service Information (National ID, Addresses)
-- Step 3: Review & Submit
 
-## Enhanced Password Security
+## 📋 Files to Include
 
-Strength Meter: Visual indicator showing password strength (Weak/Medium/Strong)
-Show/Hide Toggle: Eye icon to toggle password visibility
-Secure Password Generator: One-click generation of secure passwords
-Real-time Requirements: Visual checklist showing which requirements are met
-Requirements:
+### HTML Files (Include in this order):
+1. `index.html` - Main registration page
+2. `pages/login.html` - Login page
+3. `pages/forgotPassword.html` - Forgot password request page
+4. `pages/verifyOTP.html` - OTP verification page
+5. `pages/setPasswordPage.html` - Password reset page
 
-Minimum 8 characters
-At least one uppercase letter
-At least one lowercase letter
-At least one number
+### CSS Files:
+1. `styles/styles.css` - Global OPE styles (must be included in all HTML files)
 
+### JavaScript Files (Include respective file with each HTML page):
+1. `scripts/scripts.js` - For index.html
+2. `scripts/login.js` - For pages/login.html
+3. `scripts/forgotPassword.js` - For pages/forgotPassword.html
+4. `scripts/verifyOTP.js` - For pages/verifyOTP.html
+5. `scripts/setPasswordPage.js` - For pages/setPasswordPage.html
 
+### 🔄 Form Flow
+The authentication system follows this flow:
 
-## Real-Time Validation
+1. Registration (index.html) → Creates new account
+2. Login (pages/login.html) → Access existing account
+3. Forgot Password (pages/forgotPassword.html) → Request reset link
+4. OTP Verification (pages/verifyOTP.html) → Verify identity
+5. Set Password (pages/setPasswordPage.html) → Create new password
 
-Inline validation on field blur and input events
-Visual feedback with success/error states
-Specific error messages for each field type
-Format helpers for mobile numbers and National ID
+## 🔧 Dependencies
 
-## User Experience Improvements
-
-Progress indicator showing current step and completion status
-Responsive design with mobile-first approach
-Smooth animations and transitions
-Loading states during form submission
-Friendly messaging throughout the process
-
-## 🎨 Design & Branding
-Color Scheme (OPE Brand)
-
-Primary Blue: #004ce6 (main brand color)
-Secondary Orange: #f59e0b (accent color)
-Success Green: #10b981
-Error Red: #ef4444
-Neutral Grays: Various shades for text and backgrounds
-
-## Typography
-
-Font Family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
-Hierarchy: Clear font sizes from 0.75rem to 1.875rem
-Weight: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
-
-## 📱 Responsive Breakpoints
-
-Desktop: > 768px (default layout)
-Tablet: ≤ 768px (adjusted grid layouts)
-Mobile: ≤ 480px (single column, stacked elements)
+1. **Tailwind CSS** - Utility-first CSS framework
+   - Include via CDN in HTML head:
+   ```html
+   <script src="https://cdn.tailwindcss.com"></script>
