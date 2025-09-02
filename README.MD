@@ -59,7 +59,7 @@ A modern, responsive registration form for Oshakati Premier Electric (OPE) featu
 
 This section explains how the authentication forms work and how to handle submissions.
 
-- Form Submission
+### Form Submission
 
 1. When a user submits any authentication form (login, forgot password, set password, verify OTP), the form data is collected.
 
