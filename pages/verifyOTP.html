@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Verification</title>
+    <link rel="shortcut icon" href="./images/home-fav-icon.png" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        .otp-input {
+            width: 3rem;
+            height: 3rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .otp-input:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        @media (max-width: 640px) {
+            .otp-input {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.25rem;
+            }
+        }
+        
+        /* Modal styles */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+        
+        .modal-content {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-icon {
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="flex flex-col items-center px-6 pt-8 pb-6">
+            <div class="w-[90px] h-[100px] mb-8">
+                <img class="w-full h-full" src="../assets/logo.png" alt="Logo" />
+            </div>
+            <h1 class="text-2xl text-gray-900">Enter OTP</h1>
+            <p class="text-gray-500 mt-2 text-center">We've sent a 6-digit code to your email</p>
+        </div>
+            
+        <!-- Form Container -->
+        <div class="px-6 pb-8">
+            <form id="otpForm">
+                <div class="space-y-6">
+                    <!-- OTP Input Fields -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-4">Verification Code</label>
+                        <div class="flex justify-center space-x-2 sm:space-x-3">
+                            <input type="text" maxlength="1" class="otp-input input-field rounded-lg" data-index="0">
+                            <input type="text" maxlength="1" class="otp-input input-field rounded-lg" data-index="1">
+                            <input type="text" maxlength="1" class="otp-input input-field rounded-lg" data-index="2">
+                            <input type="text" maxlength="1" class="otp-input input-field rounded-lg" data-index="3">
+                            <input type="text" maxlength="1" class="otp-input input-field rounded-lg" data-index="4">
+                            <input type="text" maxlength="1" class="otp-input input-field rounded-lg" data-index="5">
+                        </div>
+                        <span class="text-red-500 text-xs hidden mt-2 block" id="otp-error">Please enter the complete verification code</span>
+                    </div>
+                    
+                    <!-- Timer and Resend Link -->
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Didn't receive the code? 
+                            <button type="button" id="resendBtn" class="font-medium text-blue-500 hover:text-blue-600 disabled:text-gray-400 disabled:cursor-not-allowed" disabled>
+                                Resend OTP
+                            </button>
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Resend available in <span id="timer">60</span> seconds
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <div class="mt-8 space-y-3">
+                    <button type="submit" id="verifyBtn" class="w-full bg-[#1b1e20] text-white py-2 px-4 rounded-[4px] font-medium transition-colors">
+                        Verify OTP
+                    </button>
+                    <div class="text-center mt-4">
+                        <a href="forgotPassword.html" class="text-sm text-blue-500 hover:text-blue-600">
+                            Back to Forgot Password
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop fixed inset-0"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative z-10">
+                <div class="text-center">
+                    <!-- Success Icon -->
+                    <div class="flex justify-center mb-4">
+                        <div class="success-icon w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">OTP Verified!</h3>
+                    <p class="text-gray-600 mb-6">
+                        Your OTP has been verified successfully. You can now proceed to set a new password.
+                    </p>
+                    
+                    <!-- Action Button -->
+                    <button id="proceedBtn" class="w-full bg-[#1b1e20] text-white py-2 px-4 rounded-[4px] font-medium transition-colors hover:bg-black">
+                        Set New Password
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Resend Success Modal -->
+    <div id="resendSuccessModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop fixed inset-0"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative z-10">
+                <div class="text-center">
+                    <!-- Success Icon -->
+                    <div class="flex justify-center mb-4">
+                        <div class="success-icon w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">OTP Resent!</h3>
+                    <p class="text-gray-600 mb-6">
+                        A new OTP has been sent to your email address. Please check your inbox and enter the code.
+                    </p>
+                    
+                    <!-- Action Button -->
+                    <button id="closeResendModal" class="w-full bg-blue-500 text-white py-3 px-4 rounded-[4px] font-medium transition-colors hover:bg-blue-600">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const otpForm = document.getElementById('otpForm');
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const resendBtn = document.getElementById('resendBtn');
+            const timerElement = document.getElementById('timer');
+            const otpError = document.getElementById('otp-error');
+            const successModal = document.getElementById('successModal');
+            const proceedBtn = document.getElementById('proceedBtn');
+            const resendSuccessModal = document.getElementById('resendSuccessModal');
+            const closeResendModal = document.getElementById('closeResendModal');
+            
+            let countdown = 60;
+            let timerInterval;
+            
+            // Initialize OTP inputs
+            function initializeOtpInputs() {
+                otpInputs.forEach((input, index) => {
+                    // Handle input event - only allow single digit
+                    input.addEventListener('input', function(e) {
+                        const value = e.target.value;
+                        
+                        // Only allow numbers
+                        if (!/^\d$/.test(value)) {
+                            e.target.value = '';
+                            return;
+                        }
+                        
+                        // Move to next input if current is filled
+                        if (value && index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+                        
+                        // Hide error when user starts typing
+                        if (otpError.classList.contains('hidden') === false) {
+                            otpError.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Handle keydown events for special keys
+                    input.addEventListener('keydown', function(e) {
+                        // Move to previous input on backspace if current is empty
+                        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+                        
+                        // Prevent non-numeric keys (except backspace, tab, arrow keys)
+                        if (!/^\d$/.test(e.key) && 
+                            !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes(e.key)) {
+                            e.preventDefault();
+                        }
+                    });
+                    
+                    // Handle paste event
+                    input.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        const pastedData = e.clipboardData.getData('text');
+                        const digits = pastedData.replace(/\D/g, '').slice(0, 6).split('');
+                        
+                        // Clear all inputs first
+                        otpInputs.forEach(inp => inp.value = '');
+                        
+                        // Fill the inputs with pasted digits
+                        digits.forEach((digit, i) => {
+                            if (i < otpInputs.length) {
+                                otpInputs[i].value = digit;
+                            }
+                        });
+                        
+                        // Focus the next empty input or the last filled one
+                        const nextIndex = Math.min(digits.length, otpInputs.length - 1);
+                        otpInputs[nextIndex].focus();
+                    });
+                });
+            }
+            
+            // Start countdown timer
+            function startTimer() {
+                resendBtn.disabled = true;
+                countdown = 60;
+                updateTimerDisplay();
+                
+                timerInterval = setInterval(() => {
+                    countdown--;
+                    updateTimerDisplay();
+                    
+                    if (countdown <= 0) {
+                        clearInterval(timerInterval);
+                        resendBtn.disabled = false;
+                        timerElement.textContent = '0';
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                timerElement.textContent = countdown;
+            }
+            
+            // Get OTP value
+            function getOtpValue() {
+                return Array.from(otpInputs).map(input => input.value).join('');
+            }
+            
+            // Validate OTP
+            function validateOtp() {
+                const otp = getOtpValue();
+                
+                if (otp.length !== 6) {
+                    otpError.textContent = 'Please enter the complete 6-digit code';
+                    otpError.classList.remove('hidden');
+                    return false;
+                }
+                
+                otpError.classList.add('hidden');
+                return true;
+            }
+            
+            // Show success modal
+            function showSuccessModal() {
+                successModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            // Hide success modal
+            function hideSuccessModal() {
+                successModal.classList.add('hidden');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+            
+            // Show resend success modal
+            function showResendSuccessModal() {
+                resendSuccessModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            // Hide resend success modal
+            function hideResendSuccessModal() {
+                resendSuccessModal.classList.add('hidden');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+            
+            // Form submission
+            otpForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateOtp()) {
+                    const otp = getOtpValue();
+                    
+                    // Disable button to prevent multiple submissions
+                    verifyBtn.disabled = true;
+                    verifyBtn.textContent = 'Verifying...';
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        // For demo purposes, we'll accept any 6-digit code
+                        // In a real application, you would verify the OTP with your backend
+                        
+                        // Show success modal
+                        showSuccessModal();
+                        
+                        // Reset button
+                        verifyBtn.disabled = false;
+                        verifyBtn.textContent = 'Verify OTP';
+                    }, 1500);
+                }
+            });
+            
+            // Resend OTP
+            resendBtn.addEventListener('click', function() {
+                // Disable button temporarily
+                resendBtn.disabled = true;
+                resendBtn.textContent = 'Sending...';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Show resend success modal
+                    showResendSuccessModal();
+                    
+                    startTimer();
+                    resendBtn.textContent = 'Resend OTP';
+                    
+                    // Clear existing OTP inputs
+                    otpInputs.forEach(input => input.value = '');
+                    otpInputs[0].focus();
+                }, 1500);
+            });
+            
+            // Proceed button in success modal
+            proceedBtn.addEventListener('click', function() {
+                hideSuccessModal();
+                window.location.href = 'setPasswordPage.html';
+            });
+            
+            // Close button in resend modal
+            closeResendModal.addEventListener('click', function() {
+                hideResendSuccessModal();
+            });
+            
+            // Initialize
+            initializeOtpInputs();
+            startTimer();
+            
+            // Focus first input
+            otpInputs[0].focus();
+        });
+    </script>
+</body>
+</html>

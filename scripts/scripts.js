@@ -1,425 +1,348 @@
-   // Form state management
-        let currentStep = 1;
-        const totalSteps = 3;
-        const formData = {};
-
-        // Password requirements
-        const passwordRequirements = {
-            length: /.{8,}/,
-            uppercase: /[A-Z]/,
-            lowercase: /[a-z]/,
-            number: /\d/
-        };
-
-        // Initialize form
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeForm();
+document.addEventListener('DOMContentLoaded', function() {
+    // All your existing code goes here
+    
+    let currentStep = 1;
+    const totalSteps = 2;
+    // Elements
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const currentStepSpan = document.getElementById('current-step');
+    const progressBar = document.getElementById('progress-bar');
+    const form = document.getElementById('registrationForm');
+    // Password elements
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    
+    // Update step display
+    function updateStepDisplay() {
+        currentStepSpan.textContent = currentStep;
+        
+        // Update progress bar
+        const progressPercentage = (currentStep / totalSteps) * 100;
+        progressBar.style.width = progressPercentage + '%';
+        
+        if (currentStep === 1) {
+            step1.classList.remove('hidden');
+            step2.classList.add('hidden');
+            nextBtn.classList.remove('hidden');
+            backBtn.classList.add('hidden');
+            submitBtn.classList.add('hidden');
+        } else {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            nextBtn.classList.add('hidden');
+            backBtn.classList.remove('hidden');
+            submitBtn.classList.remove('hidden');
+        }
+    }
+    
+    // Validation functions
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    function validateMobile(mobile) {
+        const mobileRegex = /^0[0-9]{9}$/;
+        return mobileRegex.test(mobile);
+    }
+    
+    function calculatePasswordStrength(password) {
+        let score = 0;
+        
+        if (password.length >= 8) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        
+        return score;
+    }
+    
+    function updatePasswordStrength(password) {
+        const strength = calculatePasswordStrength(password);
+        const indicators = ['strength-1', 'strength-2', 'strength-3', 'strength-4'];
+        
+        indicators.forEach((id, index) => {
+            const element = document.getElementById(id);
+            element.className = 'password-strength-bar flex-1';
+            
+            if (index < strength) {
+                if (strength === 1) element.classList.add('strength-weak');
+                else if (strength === 2) element.classList.add('strength-fair');
+                else if (strength === 3) element.classList.add('strength-good');
+                else if (strength >= 4) element.classList.add('strength-strong');
+            } else {
+                element.classList.add('strength-gray');
+            }
         });
-
-        function initializeForm() {
-            // Add event listeners for real-time validation
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('blur', () => validateField(input));
-                input.addEventListener('input', () => {
-                    if (input.type === 'password' && input.id === 'password') {
-                        checkPasswordStrength(input.value);
-                    }
-                    if (input.id === 'confirmPassword') {
-                        validatePasswordMatch();
-                    }
-                    clearValidationMessage(input);
-                });
-            });
-
-            // Mobile number formatting
-            document.getElementById('mobile').addEventListener('input', formatMobileNumber);
-            
-            // National ID formatting
-            document.getElementById('nationalId').addEventListener('input', formatNationalId);
+    }
+    
+    function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const error = document.getElementById(fieldId + '-error');
+        field.classList.add('input-error');
+        error.textContent = message;
+        error.classList.remove('hidden');
+    }
+    
+    function hideError(fieldId) {
+        const field = document.getElementById(fieldId);
+        const error = document.getElementById(fieldId + '-error');
+        field.classList.remove('input-error');
+        error.classList.add('hidden');
+    }
+    
+    function validateStep1() {
+        let isValid = true;
+        
+        // First Name
+        const firstName = document.getElementById('firstName').value.trim();
+        if (!firstName) {
+            showError('firstName', 'First name is required');
+            isValid = false;
+        } else {
+            hideError('firstName');
         }
-
-        // Step navigation
-        function nextStep() {
-            if (validateCurrentStep()) {
-                saveCurrentStepData();
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    showStep(currentStep);
-                    updateProgressBar();
-                    if (currentStep === 3) {
-                        populateReview();
-                    }
-                }
-            }
+        // Last Name
+        const lastName = document.getElementById('lastName').value.trim();
+        if (!lastName) {
+            showError('lastName', 'Last name is required');
+            isValid = false;
+        } else {
+            hideError('lastName');
         }
-
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-                updateProgressBar();
-            }
+        // Mobile Number
+        const mobile = document.getElementById('mobile').value.trim();
+        if (!mobile) {
+            showError('mobile', 'Mobile number is required');
+            isValid = false;
+        } else if (!validateMobile(mobile)) {
+            showError('mobile', 'Please enter a valid mobile number (08XXXXXXX)');
+            isValid = false;
+        } else {
+            hideError('mobile');
         }
-
-        function showStep(step) {
-            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-            document.getElementById(`step${step}`).classList.add('active');
+        // Email
+        const email = document.getElementById('email').value.trim();
+        if (!email) {
+            showError('email', 'Email address is required');
+            isValid = false;
+        } else if (!validateEmail(email)) {
+            showError('email', 'Please enter a valid email address');
+            isValid = false;
+        } else {
+            hideError('email');
         }
-
-        function updateProgressBar() {
-            document.querySelectorAll('.progress-step').forEach(step => {
-                const stepNumber = parseInt(step.dataset.step);
-                if (stepNumber <= currentStep) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
+        return isValid;
+    }
+    
+    function validateStep2() {
+        let isValid = true;
+        
+        // Physical Address
+        const physicalAddress = document.getElementById('physicalAddress').value.trim();
+        if (!physicalAddress) {
+            showError('physicalAddress', 'Physical address is required');
+            isValid = false;
+        } else {
+            hideError('physicalAddress');
         }
-
-        // Validation functions
-        function validateCurrentStep() {
-            const currentStepElement = document.getElementById(`step${currentStep}`);
-            const requiredInputs = currentStepElement.querySelectorAll('[required]');
-            let isValid = true;
-
-            requiredInputs.forEach(input => {
-                if (!validateField(input)) {
-                    isValid = false;
-                }
-            });
-
-            return isValid;
+        // Password
+        const password = document.getElementById('password').value;
+        if (!password) {
+            showError('password', 'Password is required');
+            isValid = false;
+        } else if (password.length < 8) {
+            showError('password', 'Password must be at least 8 characters');
+            isValid = false;
+        } else {
+            hideError('password');
         }
-
-        function validateField(field) {
-            const value = field.value.trim();
-            const fieldName = field.name;
-            let isValid = true;
-            let message = '';
-
-            // Clear previous validation state
-            clearValidationMessage(field);
-
-            // Required field validation
-            if (field.hasAttribute('required') && !value) {
-                message = `${getFieldLabel(field)} is required`;
-                isValid = false;
-            }
-            // Email validation
-            else if (fieldName === 'email' && value) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(value)) {
-                    message = 'Please enter a valid email address';
-                    isValid = false;
-                }
-            }
-            // Mobile number validation
-            else if (fieldName === 'mobile' && value) {
-                const mobileRegex = /.+/;
-
-                if (!mobileRegex.test(value)) {
-                    message = 'Please enter a valid Namibian mobile number';
-                    isValid = false;
-                }
-            }
-            // National ID validation
-            else if (fieldName === 'nationalId' && value) {
-                if (value.length !== 14 || !/^\d{14}$/.test(value)) {
-                    message = 'National ID must be exactly 14 digits';
-                    isValid = false;
-                }
-            }
-            // Password validation
-            else if (fieldName === 'password' && value) {
-                if (!isPasswordStrong(value)) {
-                    message = 'Password does not meet requirements';
-                    isValid = false;
-                }
-            }
-            // Confirm password validation
-            else if (fieldName === 'confirmPassword' && value) {
-                const password = document.getElementById('password').value;
-                if (value !== password) {
-                    message = 'Passwords do not match';
-                    isValid = false;
-                }
-            }
-
-            if (!isValid) {
-                showValidationMessage(field, message, 'error');
-            } else if (value) {
-                showValidationMessage(field, '✓', 'success');
-            }
-
-            return isValid;
+        // Confirm Password
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (!confirmPassword) {
+            showError('confirmPassword', 'Please confirm your password');
+            isValid = false;
+        } else if (password !== confirmPassword) {
+            showError('confirmPassword', 'Passwords do not match');
+            isValid = false;
+        } else {
+            hideError('confirmPassword');
         }
-
-        function showValidationMessage(field, message, type) {
-            const validationElement = field.parentElement.querySelector('.validation-message');
-            if (validationElement) {
-                validationElement.textContent = message;
-                validationElement.className = `validation-message ${type}`;
-            }
+        return isValid;
+    }
+    
+    // Event Listeners
+    nextBtn.addEventListener('click', function() {
+        if (validateStep1()) {
+            currentStep = 2;
+            updateStepDisplay();
         }
-
-        function clearValidationMessage(field) {
-            const validationElement = field.parentElement.querySelector('.validation-message');
-            if (validationElement) {
-                validationElement.textContent = '';
-                validationElement.className = 'validation-message';
-            }
+    });
+    
+    backBtn.addEventListener('click', function() {
+        currentStep = 1;
+        updateStepDisplay();
+    });
+    
+    // Password strength tracking
+    passwordInput.addEventListener('input', function() {
+        updatePasswordStrength(this.value);
+        if (confirmPasswordInput.value && this.value !== confirmPasswordInput.value) {
+            showError('confirmPassword', 'Passwords do not match');
+        } else if (confirmPasswordInput.value && this.value === confirmPasswordInput.value) {
+            hideError('confirmPassword');
         }
-
-        function getFieldLabel(field) {
-            const label = field.parentElement.querySelector('label');
-            return label ? label.textContent.replace(' *', '') : field.name;
+    });
+    
+    confirmPasswordInput.addEventListener('input', function() {
+        if (passwordInput.value && this.value !== passwordInput.value) {
+            showError('confirmPassword', 'Passwords do not match');
+        } else if (passwordInput.value && this.value === passwordInput.value) {
+            hideError('confirmPassword');
         }
-
-        // Password strength checker
-        function checkPasswordStrength(password) {
-            const strengthBar = document.querySelector('.strength-bar');
-            const strengthText = document.querySelector('.strength-text span');
-            const requirements = document.querySelectorAll('.requirement');
-
-            let score = 0;
-            let metRequirements = 0;
-
-            // Check each requirement
-            Object.keys(passwordRequirements).forEach((req, index) => {
-                const requirement = requirements[index];
-                const icon = requirement.querySelector('i');
-                
-                if (passwordRequirements[req].test(password)) {
-                    requirement.classList.add('met');
-                    icon.className = 'fas fa-check';
-                    metRequirements++;
-                } else {
-                    requirement.classList.remove('met');
-                    icon.className = 'fas fa-times';
-                }
-            });
-
-            // Calculate strength
-            score = (metRequirements / Object.keys(passwordRequirements).length) * 100;
-
-            // Update strength meter
-            strengthBar.style.width = score + '%';
-            
-            if (score < 50) {
-                strengthBar.className = 'strength-bar weak';
-                strengthText.textContent = 'Weak';
-            } else if (score < 75) {
-                strengthBar.className = 'strength-bar medium';
-                strengthText.textContent = 'Medium';
-            } else {
-                strengthBar.className = 'strength-bar strong';
-                strengthText.textContent = 'Strong';
-            }
-        }
-
-        function isPasswordStrong(password) {
-            return Object.values(passwordRequirements).every(req => req.test(password));
-        }
-
-        function validatePasswordMatch() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (confirmPassword && password !== confirmPassword) {
-                showValidationMessage(document.getElementById('confirmPassword'), 'Passwords do not match', 'error');
-            } else if (confirmPassword && password === confirmPassword) {
-                showValidationMessage(document.getElementById('confirmPassword'), '✓', 'success');
-            }
-        }
-
-        // Password utilities
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            const toggle = field.parentElement.querySelector('.password-toggle i');
-            
-            if (field.type === 'password') {
-                field.type = 'text';
-                toggle.className = 'fas fa-eye-slash';
-            } else {
-                field.type = 'password';
-                toggle.className = 'fas fa-eye';
-            }
-        }
-
-        function generateSecurePassword() {
-            const chars = {
-                lowercase: 'abcdefghijklmnopqrstuvwxyz',
-                uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-                numbers: '0123456789',
-                symbols: '!@#$%^&*'
+    });
+    
+    // Password visibility toggles
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+    });
+    
+    toggleConfirmPassword.addEventListener('click', function() {
+        const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPasswordInput.setAttribute('type', type);
+    });
+    
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (currentStep === 2 && validateStep2()) {
+            // Collect all form data
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                idNumber: document.getElementById('idNumber').value.trim(),
+                mobile: document.getElementById('mobile').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                postalAddress: document.getElementById('postalAddress').value.trim(),
+                physicalAddress: document.getElementById('physicalAddress').value.trim(),
+                password: document.getElementById('password').value
             };
             
-            let password = '';
+            // Here you would typically send the data to your backend
+            console.log('Registration data:', formData);
             
-            // Ensure at least one character from each category
-            password += getRandomChar(chars.lowercase);
-            password += getRandomChar(chars.uppercase);
-            password += getRandomChar(chars.numbers);
-            password += getRandomChar(chars.symbols);
-            
-            // Fill remaining length
-            const allChars = chars.lowercase + chars.uppercase + chars.numbers + chars.symbols;
-            for (let i = 4; i < 12; i++) {
-                password += getRandomChar(allChars);
-            }
-            
-            // Shuffle the password
-            password = password.split('').sort(() => 0.5 - Math.random()).join('');
-            
-            document.getElementById('password').value = password;
-            checkPasswordStrength(password);
-            
-            // Show password temporarily
-            document.getElementById('password').type = 'text';
-            document.querySelector('#password').parentElement.querySelector('.password-toggle i').className = 'fas fa-eye-slash';
-            
-            setTimeout(() => {
-                document.getElementById('password').type = 'password';
-                document.querySelector('#password').parentElement.querySelector('.password-toggle i').className = 'fas fa-eye';
-            }, 3000);
+            // Show success modal
+            document.getElementById('successModal').classList.remove('hidden');
         }
-
-        function getRandomChar(str) {
-            return str.charAt(Math.floor(Math.random() * str.length));
+    });
+    
+    // Real-time validation for better UX
+    document.getElementById('firstName').addEventListener('blur', function() {
+        if (!this.value.trim()) {
+            showError('firstName', 'First name is required');
+        } else {
+            hideError('firstName');
         }
-
-        // Input formatting
-        function formatMobileNumber(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            
-            if (value.startsWith('264')) {
-                value = '+264 ' + value.substring(3);
-            } else if (value.startsWith('0')) {
-                value = '+264 ' + value.substring(1);
-            } else if (!value.startsWith('+264')) {
-                value = '+264 ' + value;
-            }
-            
-            // Format: +264 XX XXX XXXX
-            value = value.replace(/(\+264)\s?(\d{2})(\d{3})(\d{4})/, '$1 $2 $3 $4');
-            
-            e.target.value = value;
+    });
+    
+    document.getElementById('lastName').addEventListener('blur', function() {
+        if (!this.value.trim()) {
+            showError('lastName', 'Last name is required');
+        } else {
+            hideError('lastName');
         }
-
-        function formatNationalId(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 14) {
-                value = value.substring(0, 14);
-            }
-            e.target.value = value;
+    });
+    
+    document.getElementById('mobile').addEventListener('blur', function() {
+        const mobile = this.value.trim();
+        if (!mobile) {
+            showError('mobile', 'Mobile number is required');
+        } else if (!validateMobile(mobile)) {
+            showError('mobile', 'Please enter a valid mobile number (08XXXXXXX)');
+        } else {
+            hideError('mobile');
         }
-
-        // Data management
-        function saveCurrentStepData() {
-            const currentStepElement = document.getElementById(`step${currentStep}`);
-            const inputs = currentStepElement.querySelectorAll('input, select, textarea');
-            
-            inputs.forEach(input => {
-                if (input.type !== 'password') {
-                    formData[input.name] = input.value;
-                }
-            });
+    });
+    
+    document.getElementById('email').addEventListener('blur', function() {
+        const email = this.value.trim();
+        if (!email) {
+            showError('email', 'Email address is required');
+        } else if (!validateEmail(email)) {
+            showError('email', 'Please enter a valid email address');
+        } else {
+            hideError('email');
         }
-
-        function populateReview() {
-            document.getElementById('reviewName').textContent = `${formData.firstName} ${formData.lastName}`;
-            document.getElementById('reviewMobile').textContent = formData.mobile;
-            document.getElementById('reviewEmail').textContent = formData.email;
-            document.getElementById('reviewNationalId').textContent = formData.nationalId;
-            
-            const physicalAddress = `${formData.street}, ${formData.town}, ${formData.region}`;
-            document.getElementById('reviewPhysicalAddress').textContent = physicalAddress;
-            
-            const postalAddress = formData.postalAddress || 'Same as physical address';
-            document.getElementById('reviewPostalAddress').textContent = postalAddress;
+    });
+    
+    document.getElementById('physicalAddress').addEventListener('blur', function() {
+        if (!this.value.trim()) {
+            showError('physicalAddress', 'Physical address is required');
+        } else {
+            hideError('physicalAddress');
         }
-
-        // Form submission
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!document.getElementById('terms').checked) {
-                showValidationMessage(document.getElementById('terms'), 'You must agree to the terms and conditions', 'error');
-                return;
-            }
-            
-            submitForm();
+    });
+    
+    // Initialize
+    updateStepDisplay();
+    
+    // Already have an account button functionality
+    const alreadyHaveAccountBtn = document.getElementById('alreadyHaveAccountBtn');
+    
+    if (alreadyHaveAccountBtn) {
+        alreadyHaveAccountBtn.addEventListener('click', function() {
+            // Redirect to login page
+            window.location.href = 'pages/login.html';
         });
+    } else {
+        console.error('Button with ID "alreadyHaveAccountBtn" not found');
+    }
+});
 
-        function submitForm() {
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = submitBtn.querySelector('.btn-text');
-            const btnSpinner = submitBtn.querySelector('.btn-spinner');
-            
-            // Show loading state
-            btnText.style.display = 'none';
-            btnSpinner.style.display = 'inline-block';
-            submitBtn.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                // Simulate random success/failure for demo
-                const isSuccess = Math.random() > 0.2; // 80% success rate
-                
-                if (isSuccess) {
-                    showSuccess();
-                } else {
-                    showError('This email address is already registered. Please use a different email or log in to your existing account.');
-                }
-                
-                // Reset button state
-                btnText.style.display = 'inline-block';
-                btnSpinner.style.display = 'none';
-                submitBtn.disabled = false;
-            }, 2000);
-        }
+// Form submission
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (currentStep === 2 && validateStep2()) {
+        // Collect all form data
+        const formData = {
+            firstName: document.getElementById('firstName').value.trim(),
+            lastName: document.getElementById('lastName').value.trim(),
+            idNumber: document.getElementById('idNumber').value.trim(),
+            mobile: document.getElementById('mobile').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            postalAddress: document.getElementById('postalAddress').value.trim(),
+            physicalAddress: document.getElementById('physicalAddress').value.trim(),
+            password: document.getElementById('password').value
+        };
+        
+        // Here you would typically send the data to your backend
+        console.log('Registration data:', formData);
+        
+        // Show success modal
+        document.getElementById('successModal').classList.remove('hidden');
+    }
+});
 
-        function showSuccess() {
-            document.querySelector('.form-container').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
-        }
-
-        function showError(message) {
-            document.getElementById('errorText').textContent = message;
-            document.querySelector('.form-container').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'block';
-        }
-
-        function hideError() {
-            document.getElementById('errorMessage').style.display = 'none';
-            document.querySelector('.form-container').style.display = 'block';
-        }
-
-        // Utility functions
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        function validateMobile(mobile) {
-            const re = /^\+264\s?\d{2}\s?\d{3}\s?\d{4}$/;
-            return re.test(mobile);
-        }
-
-        function validateNationalId(id) {
-            return /^\d{14}$/.test(id);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                e.preventDefault();
-                if (currentStep < totalSteps) {
-                    nextStep();
-                } else {
-                    document.getElementById('registrationForm').dispatchEvent(new Event('submit'));
-                }
-            }
+// Continue button functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const continueBtn = document.getElementById('continueBtn');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', function() {
+            // Redirect to login page
+            window.location.href = 'pages/login.html';
         });
+    } else {
+        console.error('Button with ID "continueBtn" not found');
+    }
+});
