@@ -62,28 +62,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Form submission
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateLoginForm()) {
-            // Collect form data
-            const loginData = {
-                email: emailInput.value.trim(),
-                password: passwordInput.value,
-                rememberMe: document.getElementById('remember-me').checked
-            };
-            
-            // Here you would typically send the data to your backend for authentication
-            console.log('Login data:', loginData);
-            
-            // For demo purposes, we'll simulate a failed login
-            // In a real application, you would handle the response from your API
-            loginErrorModal.classList.remove('hidden');
-            
-            // If login is successful, you would redirect to the dashboard or home page
-            // window.location.href = 'dashboard.html';
-        }
-    });
+   loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (validateLoginForm()) {
+        // Dynamically collect form data
+        const loginData = {};
+        new FormData(loginForm).forEach((value, key) => {
+            loginData[key] = value.trim ? value.trim() : value;
+        });
+
+        // Add checkbox manually (FormData ignores unchecked)
+        loginData.rememberMe = document.getElementById('remember-me').checked;
+
+        // Console log full data
+        console.log('Login data:', loginData);
+        console.table(loginData); // nicer table format in dev console
+
+        // Demo: simulate failed login
+        loginErrorModal.classList.remove('hidden');
+    }
+});
+
     
     // Close error modal
     closeErrorModal.addEventListener('click', function() {
