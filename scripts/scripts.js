@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { 
     // All your existing code goes here
     
-    let currentStep = 1;
+    let currentStep = 0;
     const totalSteps = 2;
     // Elements
     const step1 = document.getElementById('step1');
@@ -20,19 +20,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update step display
     function updateStepDisplay() {
-        currentStepSpan.textContent = currentStep;
+        // Display step number (add 1 because we start from 0)
+        currentStepSpan.textContent = currentStep + 1;
         
-        // Update progress bar
-        const progressPercentage = (currentStep / totalSteps) * 100;
+        // Calculate progress percentage
+        // We want 0% at start (step 0), 50% after step 1, 100% after step 2
+        let progressPercentage;
+        if (currentStep === 0) {
+            progressPercentage = 0;
+        } else if (currentStep === 1) {
+            progressPercentage = 50;
+        } else {
+            progressPercentage = 100;
+        }
         progressBar.style.width = progressPercentage + '%';
         
-        if (currentStep === 1) {
+        if (currentStep === 0) {
+            // Show step 1
             step1.classList.remove('hidden');
             step2.classList.add('hidden');
             nextBtn.classList.remove('hidden');
             backBtn.classList.add('hidden');
             submitBtn.classList.add('hidden');
-        } else {
+        } else if (currentStep === 1) {
+            // Show step 2
             step1.classList.add('hidden');
             step2.classList.remove('hidden');
             nextBtn.classList.add('hidden');
@@ -181,13 +192,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event Listeners
     nextBtn.addEventListener('click', function() {
         if (validateStep1()) {
-            currentStep = 2;
+            currentStep = 1; // Move to step 1 (which displays step 2 content)
             updateStepDisplay();
         }
     });
     
     backBtn.addEventListener('click', function() {
-        currentStep = 1;
+        currentStep = 0; // Go back to step 0 (which displays step 1 content)
         updateStepDisplay();
     });
     
@@ -224,7 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        if (currentStep === 2 && validateStep2()) {
+        if (currentStep === 1 && validateStep2()) {
+            // Set progress to 100% before showing success modal
+            currentStep = 2;
+            updateStepDisplay();
+            
             // Collect all form data
             const formData = {
                 firstName: document.getElementById('firstName').value.trim(),
@@ -239,6 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Here you would typically send the data to your backend
             console.log('Registration data:', formData);
+            console.table(formData);
             
             // Show success modal
             document.getElementById('successModal').classList.remove('hidden');
@@ -306,36 +322,8 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('Button with ID "alreadyHaveAccountBtn" not found');
     }
-});
-
-// Form submission
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
     
-    if (currentStep === 2 && validateStep2()) {
-        // Collect all form data
-        const formData = {
-            firstName: document.getElementById('firstName').value.trim(),
-            lastName: document.getElementById('lastName').value.trim(),
-            idNumber: document.getElementById('idNumber').value.trim(),
-            mobile: document.getElementById('mobile').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            postalAddress: document.getElementById('postalAddress').value.trim(),
-            physicalAddress: document.getElementById('physicalAddress').value.trim(),
-            password: document.getElementById('password').value
-        };
-        
-        // Here you would typically send the data to your backend
-        console.log('Registration data:', formData);
-        console.table(formData)
-        
-        // Show success modal
-        document.getElementById('successModal').classList.remove('hidden');
-    }
-});
-
-// Continue button functionality
-document.addEventListener('DOMContentLoaded', function() {
+    // Continue button functionality
     const continueBtn = document.getElementById('continueBtn');
     
     if (continueBtn) {
