@@ -327,6 +327,7 @@ form.addEventListener('submit', function(e) {
         
         // Here you would typically send the data to your backend
         console.log('Registration data:', formData);
+        console.table(formData)
         
         // Show success modal
         document.getElementById('successModal').classList.remove('hidden');
