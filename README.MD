@@ -4,19 +4,26 @@
 ## 📁 File Structure
 ```
 └─ .
+   ├─ assets
+   │  ├─ favicon.ico
+   │  └─ logo.png
    ├─ index.html
    ├─ pages
-   │  ├─ changePassword.html
-   │  └─ login.html
+   │  ├─ forgotPassword.html
+   │  ├─ login.html
+   │  ├─ setPasswordPage.html
+   │  └─ verifyOTP.html
    ├─ README.MD
    ├─ scripts
-   │  ├─ changePassword.js
+   │  ├─ forgotPassword.js
    │  ├─ login.js
-   │  └─ scripts.js
-   └─ styles
-      ├─ changePassword.css
-      ├─ login.css
-      └─ styles.css
+   │  ├─ scripts.js
+   │  ├─ setPasswordPage.js
+   │  └─ verifyOTP.js
+   ├─ styles
+   │  └─ styles.css
+   └─ tailwind.config.js
+
 
 ```
 ## 🚀 Features
