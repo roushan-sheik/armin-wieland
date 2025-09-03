@@ -83,7 +83,7 @@ This section explains how the authentication forms work and how to handle submis
 
 8. After form validation, you can replace the console.log(formData) statement with an API call.
 
-### Example (using fetch):
+### Api call Example (using fetch):
 
 ```js
 fetch("https://your-api-endpoint.com/auth/login", {
